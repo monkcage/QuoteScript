@@ -3,8 +3,9 @@
 
 
 const std::string MdApi::HOST {"http://api.money.126.net"};
+//const std::string MdApi::HOST {"http://localhost:8888"};
 const std::string MdApi::md_uri {"/data/feed/"};
-const std::string MdApi::subfix_uri {",money.api?callback=_ntes_quote_callback"};
+const std::string MdApi::subfix_uri {"money.api?callback=_ntes_quote_callback"};
 
 
 

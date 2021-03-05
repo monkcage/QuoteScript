@@ -31,7 +31,7 @@ public:
     {
         mg_log_set("0");
         mg_mgr_init(&m_mgr);
-        m_symbols.push_back("000001"); // default symbol
+        m_symbols.push_back("0000001"); // default symbol
         this->init();
     }
 
@@ -60,8 +60,8 @@ public:
     void Run()
     {
         while(!m_stop) {
-            std::cout << "pool ..." << std::endl;
-            mg_mgr_poll(&m_mgr, 1000);
+//            std::cout << "pool ..." << std::endl;
+            mg_mgr_poll(&m_mgr, 1000000);
         }
     }
 
@@ -79,11 +79,13 @@ public:
                                 "Accept: */*\r\n"
                                 "Referer: http://quotes.money.163.com\r\n"
                                 "Accept-Encoding: gzip, deflate\r\n"
-                                "Accept-Language: zh-CN,zh;q=0.9\r\n"};
-            int ret = mg_printf(conn, "GET %s HTTP/1.0\r\n"
-                            "Host: %.*s\r\n"
-                            "\r\n", mg_url_uri(api->m_current_url.c_str()), int(host.len), host.ptr);
-//            int ret = mg_printf(conn, header.c_str(), mg_url_uri(api->m_current_url.c_str()), int(host.len), host.ptr);
+                                "Accept-Language: zh-CN,zh;q=0.9\r\n"
+                                "\r\n"};
+//            int ret = mg_printf(conn, "GET %s HTTP/1.1\r\n"
+//                            "Host: %.*s\r\n"
+//                            "\r\n", mg_url_uri(api->m_current_url.c_str()), int(host.len), host.ptr);
+            std::cout << header.size() << std::endl;
+            int ret = mg_printf(conn, header.c_str(), mg_url_uri(api->m_current_url.c_str()), int(host.len), host.ptr);
             std::cout << "ret : " << ret << std::endl;
         } else if (type == MG_EV_HTTP_MSG) {
             msg = reinterpret_cast<struct mg_http_message*>(ev_data);
@@ -96,7 +98,7 @@ public:
                 symbols += ",";
             }
             std::string url {MdApi::HOST + MdApi::md_uri + symbols + MdApi::subfix_uri + std::to_string(api->m_random(api->m_engine))};
-            mg_printf(conn, "GET %s HTTP/1.0\r\n"
+            mg_printf(conn, "GET %s HTTP/1.1\r\n"
                             "Host: %.*s\r\n"
                             "\r\n", mg_url_uri(url.c_str()), int(host.len), host.ptr);
         } else if (type == MG_EV_ERROR) {
