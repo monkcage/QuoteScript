@@ -343,7 +343,7 @@ typedef int socklen_t;
 
 // Granularity of the send/recv IO buffer growth
 #ifndef MG_IO_SIZE
-#define MG_IO_SIZE 512
+#define MG_IO_SIZE 1024
 #endif
 
 // Maximum size of the recv IO buffer
